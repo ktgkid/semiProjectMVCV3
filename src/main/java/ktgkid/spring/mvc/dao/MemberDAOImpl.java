@@ -13,6 +13,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 
 @Repository("mdao")
@@ -24,7 +26,7 @@ public class MemberDAOImpl implements MemberDAO{
     private SimpleJdbcInsert simpleInsert;
     private NamedParameterJdbcTemplate jdbcNameTemplate;
 
-    private RowMapper<MemberVO> memberMapper = BeanPropertyRowMapper.newInstance(MemberVO.class);
+    /*private RowMapper<MemberVO> memberMapper = BeanPropertyRowMapper.newInstance(MemberVO.class);*/
 
     public MemberDAOImpl(DataSource dataSource) {
         // 고급화 단순 기술. (insert 만 가능)
@@ -52,8 +54,26 @@ public class MemberDAOImpl implements MemberDAO{
 
     @Override
     public MemberVO selectOneMember() {
-        String sql = " select userid, name, email, regdate from member where mno = 2 ";
+        String sql = " select userid, name, email, regdate from member where mno = 1 ";
 
-        return jdbcNameTemplate.queryForObject(sql, Collections.emptyMap(), memberMapper);
+        RowMapper<MemberVO> memberMapper = new MemberRowMapper();
+
+        return jdbcTemplate.queryForObject(sql, null, memberMapper);
+    }
+
+    // 콜백 메소드 정의 : mapRow
+    private class MemberRowMapper implements RowMapper<MemberVO> {
+
+        @Override
+        public MemberVO mapRow(ResultSet rs, int num) throws SQLException {
+            MemberVO m = new MemberVO();
+
+            m.setUserid(rs.getString("userid"));
+            m.setName(rs.getString("name"));
+            m.setEmail(rs.getString("email"));
+            m.setRegdate(rs.getString("regdate"));
+
+            return m;
+        }
     }
 }
