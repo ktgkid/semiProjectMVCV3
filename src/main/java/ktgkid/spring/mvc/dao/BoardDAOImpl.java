@@ -25,7 +25,7 @@ public class BoardDAOImpl implements BoardDAO {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleInsert;
     private NamedParameterJdbcTemplate jdbcNamedTemplate;
-    private RowMapper<BoardVO> boardMapper = BeanPropertyRowMapper.newInstance(BoardVO.class);
+    private RowMapper<BoardVO> boardMapper = BeanPropertyRowMapper.newInstance(BoardVO.class); // 이 방식을 많이 씀.
 
     public BoardDAOImpl(DataSource dataSource) {
         // 고급화 단순 기술. (insert 만 가능)
