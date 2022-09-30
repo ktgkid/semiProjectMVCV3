@@ -3,14 +3,19 @@ package ktgkid.spring.mvc.dao;
 
 import ktgkid.spring.mvc.vo.BoardVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class BoardDAOImpl implements BoardDAO {
@@ -19,6 +24,8 @@ public class BoardDAOImpl implements BoardDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleInsert;
+    private NamedParameterJdbcTemplate jdbcNamedTemplate;
+    private RowMapper<BoardVO> boardMapper = BeanPropertyRowMapper.newInstance(BoardVO.class);
 
     public BoardDAOImpl(DataSource dataSource) {
         // 고급화 단순 기술. (insert 만 가능)
@@ -26,6 +33,9 @@ public class BoardDAOImpl implements BoardDAO {
                 .withTableName("board")
                 .usingColumns("title", "userid", "content");
         // sql 구문 생략가능.
+
+        jdbcNamedTemplate = new NamedParameterJdbcTemplate(dataSource);
+
     }
 
     @Override
@@ -40,5 +50,12 @@ public class BoardDAOImpl implements BoardDAO {
         };
 
         return jdbcTemplate.update(sql, params);*/
+    }
+
+    @Override
+    public List<BoardVO> selectBoard() {
+        String sql = " select bno, title, userid, regdate, view from board order by bno desc ";
+
+        return jdbcNamedTemplate.query(sql, Collections.emptyMap(), boardMapper);
     }
 }

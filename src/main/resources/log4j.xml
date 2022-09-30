@@ -32,7 +32,7 @@
 		<level value="info" />
 	</logger>
 
-	<!-- 상세한 로그를 보여줌 -->
+	<!-- 상세한 debug 로그를 보여줌 -->
 	<logger name="org.springframework.jdbc">
 		<level value="debug" />
 	</logger>
