@@ -1,7 +1,6 @@
 package ktgkid.spring.mvc.controller;
 
 import ktgkid.spring.mvc.sevice.MemberService;
-import ktgkid.spring.mvc.sevice.MemberServiceImpl;
 import ktgkid.spring.mvc.vo.MemberVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
