@@ -2,14 +2,18 @@ package ktgkid.spring.mvc.dao;
 
 import ktgkid.spring.mvc.vo.MemberVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 
 @Repository("mdao")
 public class MemberDAOImpl implements MemberDAO{
@@ -18,6 +22,9 @@ public class MemberDAOImpl implements MemberDAO{
     @Autowired
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleInsert;
+    private NamedParameterJdbcTemplate jdbcNameTemplate;
+
+    private RowMapper<MemberVO> memberMapper = BeanPropertyRowMapper.newInstance(MemberVO.class);
 
     public MemberDAOImpl(DataSource dataSource) {
         // 고급화 단순 기술. (insert 만 가능)
@@ -25,6 +32,7 @@ public class MemberDAOImpl implements MemberDAO{
                 .withTableName("member")
                 .usingColumns("userid", "passwd", "name", "email");
         // sql 구문 생략가능.
+        jdbcNameTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
@@ -40,5 +48,12 @@ public class MemberDAOImpl implements MemberDAO{
         };
 
         return jdbcTemplate.update(sql, params);*/
+    }
+
+    @Override
+    public MemberVO selectOneMember() {
+        String sql = " select userid, name, email, regdate from member where mno = 2 ";
+
+        return jdbcNameTemplate.queryForObject(sql, Collections.emptyMap(), memberMapper);
     }
 }

@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -49,8 +51,11 @@ public class MemberController {
         return "redirect:/myinfo"; /* 페이지가 바뀌게끔. */
     }
 
-    @GetMapping("/myinfo")
-    public String myinfo(){
+    @GetMapping("/myinfo/{mno}")
+    public String myinfo(Model m, @PathVariable("mno") int mno){
+        System.out.println(mno);
+        m.addAttribute("mbr", msrv.readOneMember());
+
         return "join/myinfo";
     }
 }
