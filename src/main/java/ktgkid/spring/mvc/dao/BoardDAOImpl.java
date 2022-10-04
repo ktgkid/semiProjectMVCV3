@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -15,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardDAOImpl implements BoardDAO {
@@ -53,10 +54,13 @@ public class BoardDAOImpl implements BoardDAO {
     }
 
     @Override
-    public List<BoardVO> selectBoard() {
-        String sql = " select bno, title, userid, regdate, view from board order by bno desc ";
+    public List<BoardVO> selectBoard(int snum) {
+        String sql = " select bno, title, userid, regdate, view from board order by bno desc limit :snum, 25 ";
 
-        return jdbcNamedTemplate.query(sql, Collections.emptyMap(), boardMapper);
+        Map<String, Object> params = new HashMap<>();
+        params.put("snum", snum);
+
+        return jdbcNamedTemplate.query(sql, params, boardMapper);
     }
 
     @Override

@@ -19,10 +19,12 @@ public class BoardServiceImpl implements BoardService {
         return result;
     }
 
-    @Override
-    public List<BoardVO> readBoard() {
 
-        return bdao.selectBoard();
+
+    @Override
+    public List<BoardVO> readBoard(int snum) {
+
+        return bdao.selectBoard(snum);
     }
 
     @Override

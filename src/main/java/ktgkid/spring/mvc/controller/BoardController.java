@@ -24,9 +24,28 @@ public class BoardController {
     @Autowired
     private BoardService bsrv;
 
+    /* 페이징 처리 */
+    /* 페이지당 게시물 수 perPage : 25 */
+    /* 총 페이지 수 : 전체게시물 수 / 페이지당 게시물 수 */
+    /* 총 페이지 수 pages : ceil(getTotalPage / perPage) */
+    /* 2 = 50 / 25, 3 = 51 / 25 */
+
+    /* 페이지 별 읽어 올 게시글 범위 */
+    /* 총 게시글이 55건 이라 할 때 */
+    /* 1page : 1번째 ~ 25번째 게시글 읽어옴 */
+    /* 2page : 26번째 ~ 50번째 게시글 읽어옴 */
+    /* 3page : 51번째 ~ 75번째 게시글 읽어옴 */
+    /* ... */
+    /* i page : m 번째 ~ n 번째 게시글 읽어옴 */
+    /* m = (i - 1) * 25 + 1 */
+
     @GetMapping("/list")
-    public String list(Model m){
-        m.addAttribute("bdlist", bsrv.readBoard());
+    public String list(Model m, String cpg){
+
+        int perPage = 25;
+        int snum = (Integer.parseInt(cpg) - 1) * perPage;
+
+        m.addAttribute("bdlist", bsrv.readBoard(snum));
 
         return "board/list";
     }
@@ -61,9 +80,9 @@ public class BoardController {
 
         return "redirect:/list";
     }
-    @GetMapping("/del")
+    /*@GetMapping("/del")
     public String delete(BoardVO bvo){
 
         return "redirect:/list";
-    }
+    }*/
 }
