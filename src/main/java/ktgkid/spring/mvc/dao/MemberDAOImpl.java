@@ -2,7 +2,6 @@ package ktgkid.spring.mvc.dao;
 
 import ktgkid.spring.mvc.vo.MemberVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -13,9 +12,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
 
 @Repository("mdao")
 public class MemberDAOImpl implements MemberDAO{
@@ -53,8 +49,10 @@ public class MemberDAOImpl implements MemberDAO{
     }
 
     @Override
-    public MemberVO selectOneMember() {
-        String sql = " select userid, name, email, regdate from member where mno = 1 ";
+    public MemberVO selectOneMember(String uid) {
+        String sql = " select userid, name, email, regdate from member where userid = ? ";
+
+        Object[] param = { uid };
 
         RowMapper<MemberVO> memberMapper = (rs, num) -> {
             MemberVO m = new MemberVO();
@@ -67,7 +65,7 @@ public class MemberDAOImpl implements MemberDAO{
             return m;
         };
 
-        return jdbcTemplate.queryForObject(sql, null, memberMapper);
+        return jdbcTemplate.queryForObject(sql, param, memberMapper);
     }
 
     @Override
