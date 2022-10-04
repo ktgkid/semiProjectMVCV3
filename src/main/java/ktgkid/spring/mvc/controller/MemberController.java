@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MemberController {
 
@@ -20,6 +22,9 @@ public class MemberController {
 
     // 로그 유형 : trace, debug, info, warn, error
     protected Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+
+
     @GetMapping("/join")
     public String join(){
 
@@ -45,17 +50,38 @@ public class MemberController {
         return "join/login";
     }
 
-    @PostMapping("/login")
-    public String loginok(){
+    @PostMapping("/login") // 로그인 처리.
+    public String loginok(MemberVO mvo, HttpSession sess){
+        String returnPage = "join/lgnfail";
 
-        return "redirect:/myinfo"; /* 페이지가 바뀌게끔. */
+        if (msrv.checkLogin(mvo)) {
+            sess.setAttribute("m", mvo);  // 회원정보를 세션에 저장.
+            returnPage = "redirect:/myinfo";
+        }
+
+        return returnPage; /* 페이지가 바뀌게끔. */
     }
 
-    @GetMapping("/myinfo/{mno}")
+    @GetMapping("/logout")
+    public String logout(HttpSession sess){
+
+        sess.invalidate();  // 모든 세션 제거.
+
+        return "redirect:/";
+    }
+    @GetMapping("/myinfo")
+    public String myinfo(Model m){
+
+        m.addAttribute("mbr", msrv.readOneMember());
+
+        return "join/myinfo";
+    }
+
+    /*@GetMapping("/myinfo/{mno}")
     public String myinfo(Model m, @PathVariable("mno") int mno){
         System.out.println(mno);
         m.addAttribute("mbr", msrv.readOneMember());
 
         return "join/myinfo";
-    }
+    }*/
 }

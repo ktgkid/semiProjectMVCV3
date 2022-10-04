@@ -70,6 +70,15 @@ public class MemberDAOImpl implements MemberDAO{
         return jdbcTemplate.queryForObject(sql, null, memberMapper);
     }
 
+    @Override
+    public int selectOneMember(MemberVO m) {
+        String sql = " select count(bno) cnt from member where userid = ? and passwd = ? ";
+
+        Object[] params = { m.getUserid(), m.getPasswd() };
+
+        return jdbcTemplate.queryForObject(sql, params, Integer.class);
+    }
+
     /*// 콜백 메소드 정의 : mapRow
     private class MemberRowMapper implements RowMapper<MemberVO> {
 
