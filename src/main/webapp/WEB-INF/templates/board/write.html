@@ -39,7 +39,8 @@
                 <input type="text" name="title" id="tlt">
             </div>
             <div><label for="uid">작성자</label>
-                <input type="text" name="userid" id="uid" value="abc123" readonly="readonly">
+                <input type="text" name="userid" id="uid" th:value="${session.m.userid}" readonly="readonly"> <!-- 로그인 중인 아이디를 호출. -->
+                <!--<input type="text" name="userid" id="uid" readonly="readonly" th:value="${#strings.isEmpty(session.m)}">  (x) -->
             </div>
             <div><label for="cnt" class="dragup">본문</label>
                 <textarea cols="45" rows="7" name="content" id="cnt"></textarea>

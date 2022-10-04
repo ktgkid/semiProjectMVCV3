@@ -35,10 +35,16 @@ public class BoardController {
         return "board/view";
     }
 
+    // 로그인 안했다면 -> redirect:/login
+    // 로그인 했다면 -> board/write
     @GetMapping("/write")
-    public String write(){
+    public String write(HttpSession sess){
+        String returnPage = "board/write";
 
-        return "board/write";
+        if (sess.getAttribute("m") == null) {
+            returnPage = "redirect:/login";
+        }
+        return returnPage;
     }
 
     @PostMapping("/write")
