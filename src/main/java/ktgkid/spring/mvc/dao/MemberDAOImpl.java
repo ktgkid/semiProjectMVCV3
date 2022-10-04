@@ -70,7 +70,7 @@ public class MemberDAOImpl implements MemberDAO{
 
     @Override
     public int selectOneMember(MemberVO m) {
-        String sql = " select count(bno) cnt from member where userid = ? and passwd = ? ";
+        String sql = " select count(mno) cnt from member where userid = ? and passwd = ? ";
 
         Object[] params = { m.getUserid(), m.getPasswd() };
 
