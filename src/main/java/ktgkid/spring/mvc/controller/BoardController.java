@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,8 +32,12 @@ public class BoardController {
     }
 
     @GetMapping("/view")
-    public String view(){
-        return "board/view";
+    public ModelAndView view(ModelAndView mv, String bno){
+
+        mv.setViewName("board/view");
+        mv.addObject("bd", bsrv.readOneBoard(bno));
+
+        return mv;
     }
 
     // 로그인 안했다면 -> redirect:/login
@@ -53,6 +58,11 @@ public class BoardController {
         LOGGER.info("작성완료");
 
         bsrv.newBoard(bvo);
+
+        return "redirect:/list";
+    }
+    @GetMapping("/del")
+    public String delete(BoardVO bvo){
 
         return "redirect:/list";
     }
