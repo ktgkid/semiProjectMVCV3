@@ -54,7 +54,12 @@
             </colgroup>
             <thead>
                 <tr>
-                    <td colspan="5" class="newbtn"><button type="button" id="newbtn">새글쓰기</button> </td>
+                    <td colspan="5" class="newbtn">
+                        <!--<div th:if="${session.m != null}"><button type="button" id="newbtn">새글쓰기</button></div>
+                        <div th:unless="${session.m != null}">$nbsp</div>-->
+                        <button type="button" id="newbtn" th:disabled="${session.m == null}">새글쓰기</button>
+
+                    </td>
                 </tr>
                 <tr>
                     <th>번호</th><th>제목</th><th>작성자</th><th>작성일</th><th>조회수</th>
