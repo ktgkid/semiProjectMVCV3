@@ -102,9 +102,16 @@ public class BoardController {
 
         return "redirect:/list?cpg=1";
     }
-    /*@GetMapping("/del")
-    public String delete(BoardVO bvo){
+    @GetMapping("/del")
+    public String remove(HttpSession sess, String bno){
+        String returnPage = "redirect:/list?cpg=1";
 
-        return "redirect:/list";
-    }*/
+        if (sess.getAttribute("m") == null) {
+            returnPage = "redirect:/login";
+        }else {
+            bsrv.removeBoard(bno);
+        }
+
+        return returnPage;
+    }
 }
