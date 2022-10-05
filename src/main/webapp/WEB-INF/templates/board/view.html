@@ -52,8 +52,10 @@
             </div>
             <div><label></label>  <!-- <label></label> 버튼들 정렬용으로 -->
                  <button type="button" id="go2list">목록으로</button>
-                 <button type="button" id="go2upd">수정하기</button>
-                 <button type="button" id="go2del">삭제하기</button>
+                    <th:block th:if="${not session.isEmpty() and session.m.userid == bd.userid}"> <!-- 로그인한 계정이 작성한 게시글만 수정, 삭제 가능하게 만듬. -->
+                         <button type="button" id="go2upd">수정하기</button>
+                         <button type="button" id="go2del">삭제하기</button>
+                    </th:block>
             </div>
         </div>
     </div>
@@ -67,8 +69,8 @@
         let cnts = document.querySelector('#cnts');
 
         go2list.addEventListener('click', go2lists);
-        go2upd.addEventListener('click', go2upds);
-        go2del.addEventListener('click', go2dels);
+        go2upd?.addEventListener('click', go2upds);   // ? : 오류방지하기 위해 삽입.
+        go2del?.addEventListener('click', go2dels);
 
         function go2lists() { location.href = '/list'; }
         function go2upds() {
