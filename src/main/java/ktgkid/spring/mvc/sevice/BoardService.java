@@ -11,6 +11,8 @@ public interface BoardService {
     List<BoardVO> readBoard(int snum);
 
     BoardVO readOneBoard(String bno);
+
+    int readCountBoard();
 }
 
 
