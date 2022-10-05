@@ -65,13 +65,16 @@ public class BoardDAOImpl implements BoardDAO {
         sql.append(" select bno, title, userid, regdate, view from board ");
 
         if (fkey.equals("title")) {
-            sql.append(" where title = :fval ");
+            /*sql.append(" where title = :fval ");*/
+            sql.append(" where title like :fval ");
         }
         else if (fkey.equals("userid")) {
-            sql.append(" where userid = :fval ");
+           /* sql.append(" where userid = :fval ");*/
+            sql.append(" where userid like :fval ");
         }
         else if (fkey.equals("content")) {
-            sql.append(" where content = :fval ");
+            /*sql.append(" where content = :fval ");*/
+            sql.append(" where content like :fval ");
         }
 
         sql.append(" order by bno desc limit :snum, 25 ");
@@ -79,9 +82,11 @@ public class BoardDAOImpl implements BoardDAO {
 
         Map<String, Object> params = new HashMap<>();
         params.put("snum", snum);
-        params.put("fval", fval);
+        /*params.put("fval", fval);*/
+        params.put("fval", "%" + fval + "%"); // 부분일치.
 
         return jdbcNamedTemplate.query(sql.toString(), params, boardMapper);
+        /*return jdbcNamedTemplate.query(sql, params, boardMapper);*/
     }
 
     @Override
@@ -99,11 +104,23 @@ public class BoardDAOImpl implements BoardDAO {
 
     @Override
     public int selectCountBoard(String fkey, String fval) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select ceil(count(bno)/25) pages from board ");
 
-        String sql = " select ceil(count(bno)/25) pages from board; ";
+        if (fkey.equals("title")) {
+            sql.append(" where title like :fval ");
+        }
+        else if (fkey.equals("userid")) {
+            sql.append(" where userid like :fval" );
+        }
+        else if (fkey.equals("content")) {
+            sql.append(" where content like :fval ");
+        }
 
+        Map<String, Object> param = new HashMap<>();
+        param.put("fval", "%" + fval + "%");
 
-        return jdbcTemplate.queryForObject(sql, null, Integer.class);
+        return jdbcNamedTemplate.queryForObject(sql.toString(), param, Integer.class);
 
     }
 }
