@@ -1,5 +1,6 @@
 package ktgkid.spring.mvc.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ktgkid.spring.mvc.sevice.MemberService;
 import ktgkid.spring.mvc.vo.MemberVO;
 import org.slf4j.Logger;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller
 public class MemberController {
@@ -100,6 +104,9 @@ public class MemberController {
     }*/
 
     // 아이디 중복검사 - REST api 이용
+    // 요청 URL : /checkuid?uid=검사할 아이디
+    // 결과 = 0 : 아이디 사용가능
+    // 결과 = 1 : 아이디 사용불가
     @ResponseBody
     @GetMapping("/checkuid")
     public String checkuid(String uid) {
@@ -109,5 +116,21 @@ public class MemberController {
         }
 
         return result;
+    }
+
+    // 우편번호 검색
+    // 요청 URL : /findzip?dong=조회할_동이름
+    // 요청결과 : JSON 객체
+    @ResponseBody
+    @GetMapping("/findzip")
+    public void findzip(String dong, HttpServletResponse res) throws IOException {
+
+        // 응답유형을 json 으로 설정
+        res.setContentType("application/json; charset=UTF-8");
+
+        // 응답결과를 view 없이 브라우저로 바로 출력
+        res.getWriter().print(msrv.findZipcode(dong));
+
+        msrv.findZipcode(dong);
     }
 }

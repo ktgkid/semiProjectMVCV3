@@ -1,6 +1,9 @@
 package ktgkid.spring.mvc.dao;
 
 import ktgkid.spring.mvc.vo.MemberVO;
+import ktgkid.spring.mvc.vo.Zipcode;
+
+import java.util.List;
 
 public interface MemberDAO {
     int insertMember(MemberVO mvo);
@@ -10,4 +13,6 @@ public interface MemberDAO {
     int selectOneMember(MemberVO m);
 
     int selectCountUserid(String uid);
+
+    List<Zipcode> selectZipcode(String string);
 }
