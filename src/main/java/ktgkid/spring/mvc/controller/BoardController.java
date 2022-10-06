@@ -114,4 +114,30 @@ public class BoardController {
 
         return returnPage;
     }
+
+    @GetMapping("/upd")
+    public String modify(HttpSession sess, String bno, Model m){
+        String returnPage = "board/update";
+
+        if (sess.getAttribute("m") == null) {
+            returnPage = "redirect:/login";
+        }else {
+            m.addAttribute("bd", bsrv.readOneBoard(bno));
+        }
+
+        return returnPage;
+    }
+
+    @PostMapping("/upd")
+    public String modifyok(HttpSession sess, BoardVO bvo){
+        String returnPage = "redirect:/view?bno=" + bvo.getBno();
+
+        if (sess.getAttribute("m") == null) {
+            returnPage = "redirect:/login";
+        }else {
+            bsrv.modifyBoard(bvo);
+        }
+
+        return returnPage;
+    }
 }

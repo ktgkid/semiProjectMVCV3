@@ -42,7 +42,7 @@
                 <span th:text="${bd.userid}"></span>
             </div>
             <div><label for="rgd">작성일</label>
-                <span th:text="${bd.regdate}"></span>
+                <span th:text="${#strings.substring(bd.regdate, 0, 16)}"></span> <!-- #strings.substring() 날짜 줄이기.-->
             </div>
             <div><label for="vws">조회수</label>
                 <span th:text="${bd.view}"></span>
