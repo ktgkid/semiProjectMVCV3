@@ -14,4 +14,6 @@ public interface MemberService {
     boolean checkLogin(MemberVO mvo);
 
     MemberVO readOneMember(String uid);
+
+    String checkUid(String uid);
 }

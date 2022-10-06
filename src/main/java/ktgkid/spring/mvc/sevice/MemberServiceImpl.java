@@ -32,6 +32,12 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public String checkUid(String uid) {
+
+        return mdao.selectCountUserid(uid) + "";
+    }
+
+    @Override
     public boolean checkLogin(MemberVO m) {
         boolean isLogin = false;
 
