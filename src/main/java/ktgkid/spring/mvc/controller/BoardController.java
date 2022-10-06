@@ -1,8 +1,10 @@
 package ktgkid.spring.mvc.controller;
 
 import ktgkid.spring.mvc.sevice.BoardService;
+import ktgkid.spring.mvc.utils.RecaptchaUtils;
 import ktgkid.spring.mvc.vo.BoardVO;
 import ktgkid.spring.mvc.vo.MemberVO;
+import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 
 @Controller
@@ -21,8 +25,21 @@ public class BoardController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     // bean 클래스로 정의한 경우 @Autowired 어노테이션 생략 가능 Spring 5.0 이상가능
-    @Autowired
+
+
+    // DI 받을 변수가 둘 이상이므로 생성자로 재정의.
+    /*@Autowired
     private BoardService bsrv;
+    @Autowired
+    private RecaptchaUtils grcp;*/
+    private BoardService bsrv;
+    private RecaptchaUtils grcp;
+    @Autowired
+    public BoardController(BoardService bsrv, RecaptchaUtils grcp){
+        this.bsrv = bsrv;
+        this.grcp = grcp;
+    }
+
 
     /* 페이징 처리 */
     /* 페이지당 게시물 수 perPage : 25 */
@@ -93,14 +110,29 @@ public class BoardController {
         return returnPage;
     }
 
+    //captcha 사용시 클라이언트가 생성한 키와
+    // 서버에 설정해 둔 (비밀)키등을
+    // google 의 siteverify 에서 비교해서 인증에 성공하면
+    // list 로 redirect 하고, 그렇치 않으면 다시 write 로 return 함
+    // 질의를 위한 질의문자열을 작성
+    // ?secret=비밀키&response=클라이언트응답키
     @PostMapping("/write")
-    public String writeok(BoardVO bvo){
+    public String writeok(BoardVO bvo, String gcaptcha, RedirectAttributes rda) throws IOException, ParseException {  /* throws IOException, ParseException : 예외처리 */
 
-        LOGGER.info("작성완료");
+        /*LOGGER.info(gcaptcha);*/
+        /*LOGGER.info("작성완료");*/
 
-        bsrv.newBoard(bvo);
+        String returnPage = "redirect:/write";
 
-        return "redirect:/list?cpg=1";
+        if (grcp.checkCaptcha(gcaptcha)) {
+            bsrv.newBoard(bvo);
+            return "redirect:/list?cpg=1";
+        } else {
+            rda.addFlashAttribute("bvo", bvo);
+            rda.addFlashAttribute("msg", "자동가입방지 확인이 실패했어요!");
+        }
+
+        return returnPage;
     }
     @GetMapping("/del")
     public String remove(HttpSession sess, String bno){
