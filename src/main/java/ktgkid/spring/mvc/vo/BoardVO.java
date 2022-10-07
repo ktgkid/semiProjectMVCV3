@@ -1,7 +1,14 @@
 package ktgkid.spring.mvc.vo;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@ToString
 public class BoardVO {
 
     /*private int bno;
@@ -19,7 +26,7 @@ public class BoardVO {
     private String content;
 
     /* cmd + n */
-    @Override
+    /*@Override
     public String toString() {
         String frm = "BoardVO{bno=%s, title=%s, contents=%s, userid=%s, regdate=%s, views=%s}";
 
@@ -27,14 +34,14 @@ public class BoardVO {
 
         return result;
 
-        /*return "BoardVO{" +
+        *//*return "BoardVO{" +
                 "bno='" + bno + '\'' +
                 ", title='" + title + '\'' +
                 ", userid='" + userid + '\'' +
                 ", regdate='" + regdate + '\'' +
                 ", view='" + view + '\'' +
                 ", content='" + content + '\'' +
-                '}';*/
+                '}';*//*
     }
 
     public String getBno() {
@@ -83,5 +90,5 @@ public class BoardVO {
 
     public void setContent(String content) {
         this.content = content;
-    }
+    }*/
 }

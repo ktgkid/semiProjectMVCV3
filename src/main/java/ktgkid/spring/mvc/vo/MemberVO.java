@@ -1,5 +1,12 @@
 package ktgkid.spring.mvc.vo;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@NoArgsConstructor
+@ToString
 public class MemberVO {
 
     private String mno;
@@ -9,7 +16,7 @@ public class MemberVO {
     private String email;
     private String regdate;
 
-    @Override
+    /*@Override
     public String toString() {
         return "MemberVO{" +
                 "mno='" + mno + '\'' +
@@ -19,9 +26,9 @@ public class MemberVO {
                 ", email='" + email + '\'' +
                 ", regdate='" + regdate + '\'' +
                 '}';
-    }
+    }*/
 
-    public String getMno() {
+    /*public String getMno() {
         return mno;
     }
 
@@ -67,7 +74,7 @@ public class MemberVO {
 
     public void setRegdate(String regdate) {
         this.regdate = regdate;
-    }
+    }*/
 
 
 
