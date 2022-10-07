@@ -34,10 +34,14 @@
 
 	<!-- 상세한 debug 로그를 보여줌 -->
 	<logger name="org.springframework.jdbc">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<logger name="member">
+		<level value="debug" />
+	</logger>
+
+	<logger name="board">
 		<level value="debug" />
 	</logger>
 

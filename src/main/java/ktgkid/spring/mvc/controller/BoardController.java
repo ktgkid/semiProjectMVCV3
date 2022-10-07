@@ -74,7 +74,7 @@ public class BoardController {
 
         int perPage = 25;
         if (cpg == null || cpg.equals("")) cpg = "1";  // http://localhost:8080/list?cpg=1 -> http://localhost:8080/list 문제 없게끔.
-        if (fkey == null) fkey = "1";
+        if (fkey == null) fkey = "";
         int cpage = Integer.parseInt(cpg);
 
         int snum = (cpage - 1) * perPage;

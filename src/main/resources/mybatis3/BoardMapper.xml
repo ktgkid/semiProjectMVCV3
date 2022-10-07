@@ -4,8 +4,35 @@
 
 <mapper namespace="board">
 
-    <!--<insert id="insertBoard" statementType="PREPARED" parameterType="ktgkid.spring.mvc.vo.BoardVO">
+    <insert id="insertBoard" statementType="PREPARED" parameterType="ktgkid.spring.mvc.vo.BoardVO">
+        insert into board (title, userid, content) values (#{title}, #{userid}, #{content})
+    </insert>
 
-    </insert>-->
+    <select id="selectBoard" statementType="PREPARED" parameterType="map" resultType="ktgkid.spring.mvc.vo.BoardVO">
+        select bno, title, userid, regdate, view from board
+        <if test="fkey != ''">where ${fkey} like #{fval}</if>
+        order by bno desc limit #{snum}, 25
+    </select>
+
+    <select id="selectOneBoard" statementType="PREPARED" parameterType="String" resultType="ktgkid.spring.mvc.vo.BoardVO">
+        select * from board where bno = #{bno}
+    </select>
+
+    <update id="viewBoard" statementType="PREPARED" parameterType="String" >
+        update board set view = view + 1 where bno = #{bno}
+    </update>
+
+    <select id="selectCountBoard" statementType="PREPARED" parameterType="map" resultType="int">
+        select ceil(count(bno)/25) pages from board
+        <if test="fkey != ''">where ${fkey} like #{fval}</if>
+    </select>
+
+    <delete id="deleteBoard" statementType="PREPARED" parameterType="String">
+        delete from board where bno = #{bno}
+    </delete>
+
+    <update id="updateBoard" statementType="PREPARED" parameterType="ktgkid.spring.mvc.vo.BoardVO">
+        update board set title = #{title}, content = #{content}, regdate = current_timestamp() where bno = #{bno}
+    </update>
 
 </mapper>
