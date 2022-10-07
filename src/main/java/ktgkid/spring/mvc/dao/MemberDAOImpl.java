@@ -2,6 +2,7 @@ package ktgkid.spring.mvc.dao;
 
 import ktgkid.spring.mvc.vo.MemberVO;
 import ktgkid.spring.mvc.vo.Zipcode;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,6 +28,9 @@ public class MemberDAOImpl implements MemberDAO{
     private SimpleJdbcInsert simpleInsert;
     private NamedParameterJdbcTemplate jdbcNameTemplate;
 
+    @Autowired
+    private SqlSession sqlSession;
+
     /*private RowMapper<MemberVO> memberMapper = BeanPropertyRowMapper.newInstance(MemberVO.class);*/
     private RowMapper<Zipcode> zipcodeMapper = BeanPropertyRowMapper.newInstance(Zipcode.class);
 
@@ -41,9 +45,11 @@ public class MemberDAOImpl implements MemberDAO{
 
     @Override
     public int insertMember(MemberVO mvo) {
-        SqlParameterSource params = new BeanPropertySqlParameterSource(mvo);
+        return sqlSession.insert("member.insertMember", mvo);
 
-        return simpleInsert.execute(params);
+        /*SqlParameterSource params = new BeanPropertySqlParameterSource(mvo);
+
+        return simpleInsert.execute(params);*/
 
         /*String sql = "insert into member (userid, passwd, name, email) values (?, ?, ?, ?)"; *//* 암기사항. *//*
 
