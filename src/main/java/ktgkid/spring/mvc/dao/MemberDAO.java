@@ -12,6 +12,8 @@ public interface MemberDAO {
 
     int selectOneMember(MemberVO m);
 
+    /*int selectCountMember(MemberVO m);  // myBatis 3*/
+
     int selectCountUserid(String uid);
 
     List<Zipcode> selectZipcode(String string);

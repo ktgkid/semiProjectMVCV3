@@ -8,15 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface MemberService {
     boolean newMember(MemberVO mvo);
 
-
-    MemberVO readOneMember();
-
-
     boolean checkLogin(MemberVO mvo);
 
     MemberVO readOneMember(String uid);
 
-    String checkUid(String uid);
+    int checkUid(String uid);
 
     String findZipcode(String dong) throws JsonProcessingException;
 }

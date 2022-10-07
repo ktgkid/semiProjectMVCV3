@@ -110,9 +110,9 @@ public class MemberController {
     @ResponseBody
     @GetMapping("/checkuid")
     public String checkuid(String uid) {
-        String result = "잘못된 방식으로 호출하였습니다!";
-        if (uid != null || !uid.equals("")) {
-            result = msrv.checkUid(uid);
+        String result = "0";
+        if (msrv.checkUid(uid) > 0) {
+            result = "1";
         }
 
         return result;

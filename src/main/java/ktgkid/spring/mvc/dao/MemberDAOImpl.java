@@ -8,9 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -24,15 +22,16 @@ public class MemberDAOImpl implements MemberDAO{
     //@Autowired bean 태그에 정의한 경우 생략가능. Spring 5.0 이상가능
 
     @Autowired
+    private SqlSession sqlSession;   // myBatis 3
+
+    /*@Autowired
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleInsert;
-    private NamedParameterJdbcTemplate jdbcNameTemplate;
+    private NamedParameterJdbcTemplate jdbcNameTemplate;*/
 
-    @Autowired
-    private SqlSession sqlSession;
 
     /*private RowMapper<MemberVO> memberMapper = BeanPropertyRowMapper.newInstance(MemberVO.class);*/
-    private RowMapper<Zipcode> zipcodeMapper = BeanPropertyRowMapper.newInstance(Zipcode.class);
+    /*private RowMapper<Zipcode> zipcodeMapper = BeanPropertyRowMapper.newInstance(Zipcode.class);
 
     public MemberDAOImpl(DataSource dataSource) {
         // 고급화 단순 기술. (insert 만 가능)
@@ -41,11 +40,11 @@ public class MemberDAOImpl implements MemberDAO{
                 .usingColumns("userid", "passwd", "name", "email");
         // sql 구문 생략가능.
         jdbcNameTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
+    }*/
 
     @Override
     public int insertMember(MemberVO mvo) {
-        return sqlSession.insert("member.insertMember", mvo);
+        return sqlSession.insert("member.insertMember", mvo);  // myBatis 3
 
         /*SqlParameterSource params = new BeanPropertySqlParameterSource(mvo);
 
@@ -62,7 +61,7 @@ public class MemberDAOImpl implements MemberDAO{
 
     @Override
     public MemberVO selectOneMember(String uid) {
-        String sql = " select userid, name, email, regdate from member where userid = ? ";
+        /*String sql = " select userid, name, email, regdate from member where userid = ? ";
 
         Object[] param = { uid };
 
@@ -77,35 +76,46 @@ public class MemberDAOImpl implements MemberDAO{
             return m;
         };
 
-        return jdbcTemplate.queryForObject(sql, param, memberMapper);
+        return jdbcTemplate.queryForObject(sql, param, memberMapper);*/
+
+        return sqlSession.selectOne("member.selectOneMember", uid);   // myBatis 3
     }
+
+
+
 
     @Override
     public int selectOneMember(MemberVO m) {
-        String sql = " select count(mno) cnt from member where userid = ? and passwd = ? ";
+        /*String sql = " select count(mno) cnt from member where userid = ? and passwd = ? ";
 
         Object[] params = { m.getUserid(), m.getPasswd() };
 
-        return jdbcTemplate.queryForObject(sql, params, Integer.class);
+        return jdbcTemplate.queryForObject(sql, params, Integer.class);*/
+
+        return sqlSession.selectOne("member.selectCountMember", m);  // myBatis 3
     }
 
     @Override
     public int selectCountUserid(String uid) {
-        String sql = " select count(mno) cnt from member where userid = ? ";
+        /*String sql = " select count(mno) cnt from member where userid = ? ";
 
         Object[] param = new Object[] { uid };
 
-        return jdbcTemplate.queryForObject(sql, param, Integer.class);
+        return jdbcTemplate.queryForObject(sql, param, Integer.class);*/
+
+        return sqlSession.selectOne("member.selectCountUserid", uid);  // myBatis 3
     }
 
     @Override
     public List<Zipcode> selectZipcode(String dong) {
-        String sql = " select * from zipcode_2013 where dong like :dong ";
+        /*String sql = " select * from zipcode_2013 where dong like :dong ";
 
         Map<String, Object> param = new HashMap<>();
         param.put("dong", dong);
 
-        return jdbcNameTemplate.query(sql, param, zipcodeMapper);
+        return jdbcNameTemplate.query(sql, param, zipcodeMapper);*/
+
+        return sqlSession.selectList("member.selectZipcode", dong);  // myBatis 3
     }
 
     /*// 콜백 메소드 정의 : mapRow

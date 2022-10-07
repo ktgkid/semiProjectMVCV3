@@ -23,20 +23,15 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public MemberVO readOneMember() {
-        return null;
-    }
-
-    @Override
     public MemberVO readOneMember(String uid) {
 
         return mdao.selectOneMember(uid);
     }
 
     @Override
-    public String checkUid(String uid) {
+    public int checkUid(String uid) {
 
-        return mdao.selectCountUserid(uid) + "";
+        return mdao.selectCountUserid(uid);
     }
 
     @Override
